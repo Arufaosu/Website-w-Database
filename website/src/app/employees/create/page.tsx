@@ -3,7 +3,6 @@
 import { useState } from "react";
 import BackToHome from "../../components/BackToHome";
 
-
 export default function CreateEmployeePage() {
   const [form, setForm] = useState({
     firstName: "",
@@ -36,7 +35,7 @@ export default function CreateEmployeePage() {
             <input
               id={key}
               type="text"
-              value={form[key]}
+              value={form[key as keyof typeof form]}
               onChange={(e) => setForm({ ...form, [key]: e.target.value })}
               className="border border-gray-300 rounded p-2"
               required={key !== "manager"}

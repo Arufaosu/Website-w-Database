@@ -1,10 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import BackToHome from "../../components/BackToHome";
+import { useRouter } from "next/navigation";
+import BackToHome from "../../components/BackToHome"; // Assuming this component is correct
+
+interface DepartmentForm {
+  name: string;
+  manager: string;
+  status: string;
+}
 
 export default function CreateDepartmentPage() {
-  const [form, setForm] = useState({
+  const router = useRouter();
+  
+  const [form, setForm] = useState<DepartmentForm>({
     name: "",
     manager: "",
     status: "",
@@ -12,12 +21,23 @@ export default function CreateDepartmentPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await fetch("/api/departments", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    alert("Department created successfully!");
+    try {
+      // Send POST request to create a new department
+      const response = await fetch("/api/departments/0", {  // We use `0` as the "id" for the creation
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (response.ok) {
+        alert("Department created successfully!");
+      } else {
+        alert("Failed to create department.");
+      }
+    } catch (error) {
+      console.error("Error creating department:", error);
+      alert("An error occurred while creating the department.");
+    }
   };
 
   return (
@@ -32,16 +52,16 @@ export default function CreateDepartmentPage() {
             <input
               id={key}
               type="text"
-              value={key}
+              value={form[key as keyof DepartmentForm]}  // TypeScript now knows the keys are valid
               onChange={(e) => setForm({ ...form, [key]: e.target.value })}
               className="border border-gray-300 rounded p-2"
-              required
+              required={key !== "manager"}
             />
           </div>
         ))}
         <button
           type="submit"
-          className="bg-green-500 text-white rounded px-4 py-2 hover:bg-green-600"
+          className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
         >
           Submit
         </button>

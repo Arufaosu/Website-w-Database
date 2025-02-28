@@ -1,10 +1,12 @@
-import { PrismaClient } from "@prisma/client";
-import BackToHome from "../../components/BackToHome";
+// src/app/employees/list/page.tsx
+import Link from "next/link";
+import { PrismaClient, department } from '@prisma/client';
+import BackToHome from "../../components/BackToHome"; // Import the BackToHome component
 
 const prisma = new PrismaClient();
 
 export default async function DepartmentListPage() {
-  const departments = await prisma.department.findMany();
+  const department = await prisma.department.findMany();
 
   return (
     <div className="p-8">
@@ -16,19 +18,27 @@ export default async function DepartmentListPage() {
             <th className="border border-gray-300 px-4 py-2">Name</th>
             <th className="border border-gray-300 px-4 py-2">Manager</th>
             <th className="border border-gray-300 px-4 py-2">Status</th>
+            <th className="border border-gray-300 px-4 py-2">Edit</th>
           </tr>
         </thead>
         <tbody>
-          {departments.map((dept) => (
-            <tr key={dept.id}>
-              <td className="border border-gray-300 px-4 py-2">{dept.id}</td>
-              <td className="border border-gray-300 px-4 py-2">{dept.name}</td>
-              <td className="border border-gray-300 px-4 py-2">{dept.manager}</td>
-              <td className="border border-gray-300 px-4 py-2">{dept.status}</td>
+          {department.map((department) => (
+            <tr key={department.id}>
+              <td className="border border-gray-300 px-4 py-2">{department.id}</td>
+              <td className="border border-gray-300 px-4 py-2">{department.name}</td>
+              <td className="border border-gray-300 px-4 py-2">{department.manager}</td>
+              <td className="border border-gray-300 px-4 py-2">{department.status}</td>
+              <td className="border border-gray-300 px-4 py-2">
+                <Link href={`/employees/edit/${department.id}`} className="text-blue-500">
+                  Edit
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {/* Back to Home Button */}
       <BackToHome />
     </div>
   );

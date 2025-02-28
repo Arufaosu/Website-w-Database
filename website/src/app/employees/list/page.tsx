@@ -1,5 +1,7 @@
+// src/app/employees/list/page.tsx
+import Link from "next/link";
 import { PrismaClient } from "@prisma/client";
-import BackToHome from "../../components/BackToHome";
+import BackToHome from "../../components/BackToHome"; // Import the BackToHome component
 
 const prisma = new PrismaClient();
 
@@ -19,6 +21,7 @@ export default async function EmployeeListPage() {
             <th className="border border-gray-300 px-4 py-2">Telephone</th>
             <th className="border border-gray-300 px-4 py-2">Manager</th>
             <th className="border border-gray-300 px-4 py-2">Status</th>
+            <th className="border border-gray-300 px-4 py-2">Edit</th>
           </tr>
         </thead>
         <tbody>
@@ -29,12 +32,19 @@ export default async function EmployeeListPage() {
               <td className="border border-gray-300 px-4 py-2">{employee.lastName}</td>
               <td className="border border-gray-300 px-4 py-2">{employee.email}</td>
               <td className="border border-gray-300 px-4 py-2">{employee.telephone}</td>
-              <td className="border border-gray-300 px-4 py-2">{employee.manager || "N/A"}</td>
+              <td className="border border-gray-300 px-4 py-2">{employee.manager}</td>
               <td className="border border-gray-300 px-4 py-2">{employee.status}</td>
+              <td className="border border-gray-300 px-4 py-2">
+                <Link href={`/employees/edit/${employee.id}`} className="text-blue-500">
+                  Edit
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {/* Back to Home Button */}
       <BackToHome />
     </div>
   );
