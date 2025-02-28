@@ -1,9 +1,8 @@
 // src/app/employees/edit/[id]/page.tsx
-
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
 interface Employee {
   id: number;
@@ -15,29 +14,36 @@ interface Employee {
   status: string;
 }
 
-const EditEmployeePage = ({ params }: { params: { id: string } }) => {
+const EditEmployeePage = () => {
   const router = useRouter();
+  const { id } = useParams();  // Getting the `id` from the URL using `useParams` hook
   const [employee, setEmployee] = useState<Employee | null>(null);
   const [formData, setFormData] = useState<Employee | null>(null);
   const [error, setError] = useState<string>('');
 
+  // Debugging the fetch process
+  console.log("Employee Edit Page - id:", id);
+
   useEffect(() => {
     const fetchEmployee = async () => {
+      if (!id) return;
       try {
-        const res = await fetch(`/api/employees/${params.id}`);
+        const res = await fetch(`/api/employees/${id}`);
         if (!res.ok) {
           throw new Error('Failed to fetch employee data');
         }
         const data = await res.json();
+        console.log("Fetched Employee Data:", data);
         setEmployee(data);
         setFormData(data);
       } catch (err) {
+        console.error(err);
         setError('Failed to fetch employee data');
       }
     };
 
     fetchEmployee();
-  }, [params.id]);
+  }, [id]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -50,7 +56,7 @@ const EditEmployeePage = ({ params }: { params: { id: string } }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/api/employees/${params.id}`, {
+      const res = await fetch(`/api/employees/${id}`, {
         method: 'PUT',
         body: JSON.stringify(formData),
         headers: {

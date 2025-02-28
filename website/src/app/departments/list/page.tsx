@@ -1,6 +1,6 @@
-// src/app/employees/list/page.tsx
+// src/app/department/list/page.tsx
 import Link from "next/link";
-import { PrismaClient, department } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import BackToHome from "../../components/BackToHome"; // Import the BackToHome component
 
 const prisma = new PrismaClient();
@@ -29,7 +29,7 @@ export default async function DepartmentListPage() {
               <td className="border border-gray-300 px-4 py-2">{department.manager}</td>
               <td className="border border-gray-300 px-4 py-2">{department.status}</td>
               <td className="border border-gray-300 px-4 py-2">
-                <Link href={`/employees/edit/${department.id}`} className="text-blue-500">
+                <Link href={`/departments/edit/${department.id}`} className="text-blue-500">
                   Edit
                 </Link>
               </td>
